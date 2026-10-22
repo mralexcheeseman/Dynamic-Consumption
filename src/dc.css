@@ -199,7 +199,15 @@ body.dc::before {
   margin-top: 0.75rem;
 }
 .dc-sign { width: 9.5rem; height: auto; mix-blend-mode: multiply; transform: rotate(-4deg); margin-left: -0.4rem; }
-.dc-note { height: auto; mix-blend-mode: multiply; margin-left: auto; max-width: 62%; }
+.dc-note {
+  display: block;
+  height: auto;
+  max-width: 70%;
+  margin: 0.35rem 0 -0.2rem auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.dc-sign-row .dc-note { margin: 0 0 0.6rem auto; }
 
 /* ---------- turning pages, on the desk ---------- */
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Paper, pad, longDate } from "@/components/Sheet";
-import { Typed, TypedPara, sheetMarks, Coffee } from "@/components/marks";
+import { Typed, TypedPara, sheetMarks, Coffee, MarginNote } from "@/components/marks";
 import { paragraphs } from "@/components/posts";
 import Subscribe from "@/components/Subscribe";
 
@@ -25,20 +25,19 @@ export default function PostView({ post, prev, next, withSubscribe = true }) {
 
         <div className="dc-body">
           {paragraphs(post.body).map((p, i) => (
-            <TypedPara key={i} text={p} highlight={post.highlight} salt={post.number * 100 + i * 11} variant={m.highlight} />
+            <TypedPara
+              key={i}
+              text={p}
+              highlight={post.highlight}
+              salt={post.number * 100 + i * 11}
+              variant={m.highlight}
+              note={<MarginNote src={post.note_image} alt={post.note} seed={post.number} />}
+            />
           ))}
         </div>
 
         <div className="dc-sign-row">
           <img className="dc-sign" src="/assets/signature.webp" alt="Signed, Alex" />
-          {post.note_image && (
-            <img
-              className="dc-note"
-              src={post.note_image}
-              alt={post.note ? `Margin note: ${post.note}` : ""}
-              style={{ width: "13rem", transform: `rotate(${-2 - (post.number % 4)}deg)` }}
-            />
-          )}
         </div>
       </Paper>
 

@@ -1,5 +1,5 @@
 import Desk, { Paper, useDocTitle } from "@/components/Sheet";
-import { Typed, TypedPara, sheetMarks } from "@/components/marks";
+import { Typed, TypedPara, sheetMarks, MarginNote } from "@/components/marks";
 import Subscribe from "@/components/Subscribe";
 
 const lines = [
@@ -24,7 +24,7 @@ export default function About() {
         </div>
         <div className="dc-sign-row">
           <img className="dc-sign" src="/assets/signature.webp" alt="Signed, Alex" />
-          <img className="dc-note" src="/assets/note-about.webp" alt="Margin note: see you tomorrow" style={{ width: "13rem", transform: "rotate(-3deg)" }} />
+          <MarginNote src="/assets/note-about.webp" alt="see you tomorrow" seed={3} />
         </div>
       </Paper>
       <Subscribe />

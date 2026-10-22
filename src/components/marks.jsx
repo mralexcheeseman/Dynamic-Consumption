@@ -24,7 +24,7 @@ export function Typed({ text, salt = 1 }) {
 }
 
 // A paragraph, with the day's highlighted line marked if it falls inside it.
-export function TypedPara({ text, highlight, salt, variant }) {
+export function TypedPara({ text, highlight, salt, variant, note }) {
   const at = highlight ? text.indexOf(highlight) : -1;
   if (at < 0) return <p><Typed text={text} salt={salt} /></p>;
   const before = text.slice(0, at).trimEnd();
@@ -35,7 +35,27 @@ export function TypedPara({ text, highlight, salt, variant }) {
       {before && <><Typed text={before} salt={salt} />{" "}</>}
       <span className={`dc-hl v${variant}`}><Typed text={highlight} salt={salt + 50} /></span>
       {after && <>{glue(after)}<Typed text={after} salt={salt + 90} /></>}
+      {note}
     </p>
+  );
+}
+
+// Scanned margin notes, by file, at their natural width in pixels.
+// Drawn at 0.025rem per pixel so the hand comes out at typing size.
+const NOTE_WIDTHS = {"note-1": 494, "note-2": 374, "note-3": 270, "note-4": 273, "note-5": 373, "note-6": 238, "note-7": 382, "note-8": 464, "note-9": 546, "note-10": 258, "note-11": 475, "note-12": 462, "note-13": 348, "note-14": 407, "note-about": 445};
+
+export function MarginNote({ src, alt, seed = 1 }) {
+  if (!src) return null;
+  const key = src.split("/").pop().replace(".webp", "");
+  const px = NOTE_WIDTHS[key] || 380;
+  const r = hash(seed * 53 + 5);
+  return (
+    <img
+      className="dc-note"
+      src={src}
+      alt={alt ? `Margin note: ${alt}` : ""}
+      style={{ width: `${(px * 0.025).toFixed(2)}rem`, transform: `rotate(${-1 - (r % 4) * 0.7}deg)`, marginRight: `${(r % 3) * 0.8}rem` }}
+    />
   );
 }
 
