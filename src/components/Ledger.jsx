@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { pad, shortDate, todayIso } from "@/components/Sheet";
 
-// The running list of pages, typed straight onto the desk.
+// The running list of pages, typed onto a strip of card.
 export default function Ledger({ posts }) {
   const today = todayIso();
   return (
@@ -12,7 +12,7 @@ export default function Ledger({ posts }) {
             <span className="n">{pad(p.number)}</span>
             <span className="t">
               {p.title}
-              {p.published_on === today && <span className="today">today</span>}
+              {p.published_on === today && <span className="today">TODAY</span>}
             </span>
             <span className="d">{shortDate(p.published_on)}</span>
           </Link>

@@ -1,7 +1,9 @@
 /*
   Dynamic Consumption
-  Layout: a dark leather desk; each day is one folded sheet taped to it,
-  typed, then marked up by hand (highlighter, red pen, blue signature, coffee).
+  Layout: a green leather desk. Each day is one typed sheet, paper-clipped,
+  marked up afterwards with a highlighter and a red felt-tip, signed in biro.
+  Every mark is a photographic scan with the paper removed (public/assets).
+  Nothing handwritten is ever set in a font.
 */
 
 @font-face {
@@ -12,20 +14,19 @@
 
 :root {
   color-scheme: dark;
-  --desk: #1d2924;          /* green leather blotter */
-  --desk-deep: #121a17;
-  --desk-ink: #d8d0bb;      /* typed text sitting on the desk */
-  --desk-faint: #8f9a8f;
-  --paper: #efe4cf;         /* fallback under the scanned sheet */
-  --ink: #1b1915;           /* ribbon black */
+  --desk: #17221e;          /* under the leather scan, and the browser chrome */
+  --desk-ink: #d9d2bf;      /* anything typed straight onto the desk */
+  --desk-faint: #c4c9bb;
+  --paper: #efe4cf;
+  --ink: #1b1915;
   --ink-soft: #4d463b;
-  --pen: #c3141f;           /* red felt-tip, matches the pen marks */
-  --biro: #1f3c8f;          /* blue ballpoint signature */
+  --pen: #c8102e;           /* matches the felt-tip scans */
   --card: #fbf8ef;
   --card-rule: #b9cbe3;
-  --type: "TT2020", "Special Elite", "Courier Prime", "Courier New", monospace;
-  --hand: "Reenie Beanie", "Segoe Print", "Bradley Hand", cursive;
+  --type: "TT2020", "Courier Prime", "Courier New", monospace;
   --label: "Courier Prime", "Courier New", monospace;
+  --shadow-sheet: 0 1px 1px rgba(0, 0, 0, .3), 0 14px 26px rgba(0, 0, 0, .45), 0 34px 60px -10px rgba(0, 0, 0, .35);
+  --shadow-object: drop-shadow(0 2px 2px rgba(0, 0, 0, .35)) drop-shadow(0 8px 12px rgba(0, 0, 0, .25));
 }
 
 html { background: var(--desk); }
@@ -33,43 +34,37 @@ html { background: var(--desk); }
 body.dc {
   margin: 0;
   min-height: 100vh;
-  background-color: var(--desk);
-  background-image:
-    radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.05), transparent 60%),
-    radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.45) 100%);
-  background-attachment: fixed;
+  background: var(--desk) url("/assets/desk.webp") center top / 1600px auto repeat;
   color: var(--desk-ink);
-  font-family: var(--type);
+  font-family: var(--label);
   -webkit-font-smoothing: antialiased;
 }
-
-/* Leather grain over the whole desk */
+/* Lamp light: brighter where you work, darker towards the edges of the desk */
 body.dc::before {
   content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.5;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background: radial-gradient(ellipse 70% 60% at 50% 28%, rgba(255, 240, 210, .07), transparent 60%),
+    radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(0, 0, 0, .55) 100%);
 }
 
 .dc ::selection { background: #f2e04a; color: var(--ink); }
 .dc a { color: inherit; text-decoration: none; }
 .dc :focus-visible { outline: 2px dashed var(--pen); outline-offset: 4px; }
+.dc img { user-select: none; -webkit-user-drag: none; }
 
 .dc-desk {
   position: relative;
   z-index: 1;
   max-width: 46rem;
   margin: 0 auto;
-  padding: 2rem max(16px, env(safe-area-inset-right, 0px)) 6rem max(16px, env(safe-area-inset-left, 0px));
+  padding: 1.75rem max(16px, env(safe-area-inset-right, 0px)) 6rem max(16px, env(safe-area-inset-left, 0px));
 }
-@media (min-width: 720px) {
-  .dc-desk { padding-top: 3.5rem; }
-}
+@media (min-width: 720px) { .dc-desk { padding-top: 3rem; } }
 
-/* ---------- masthead: a Dymo label stuck to the desk ---------- */
+/* ---------- masthead: the Dymo label stuck to the desk ---------- */
 
 .dc-mast {
   display: flex;
@@ -77,229 +72,178 @@ body.dc::before {
   align-items: center;
   justify-content: space-between;
   gap: 1rem 1.5rem;
-  margin-bottom: 2.75rem;
+  margin-bottom: 2.5rem;
 }
-.dc-dymo {
-  display: inline-block;
-  transform: rotate(-1.6deg);
-  background: linear-gradient(180deg, #2b2b2e 0%, #141416 55%, #0c0c0d 100%);
-  color: #f4f2ec;
+.dc-dymo img {
+  display: block;
+  width: min(19rem, 72vw);
+  height: auto;
+  transform: rotate(-1.4deg);
+  filter: var(--shadow-object);
+}
+.dc-nav { display: flex; gap: 1.4rem; }
+.dc-nav a, .dc-label {
   font-family: var(--label);
+  font-size: 0.8rem;
   font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.22em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  padding: 0.42rem 0.95rem 0.38rem 1.05rem;
-  border-radius: 2px;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset, 0 3px 6px rgba(0, 0, 0, 0.45);
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.25);
 }
-@media (min-width: 720px) { .dc-dymo { font-size: 1.1rem; } }
-.dc-nav {
-  display: flex;
-  gap: 1.25rem;
-  font-family: var(--type);
-  font-size: 0.95rem;
-}
-.dc-nav a { color: var(--desk-ink); border-bottom: 1px solid transparent; }
-.dc-nav a:hover { border-bottom-color: var(--desk-ink); }
+.dc-nav a { color: var(--desk-ink); padding: 0.6rem 0; border-bottom: 2px solid transparent; }
+.dc-nav a:hover, .dc-nav a[aria-current="page"] { border-bottom-color: var(--pen); }
 
 /* ---------- the sheet ---------- */
 
+.dc-stack { position: relative; }
+
 .dc-sheet {
   position: relative;
-  overflow: hidden;
+  z-index: 2;
   background: var(--paper) url("/assets/paper-1.webp") center / cover no-repeat;
   color: var(--ink);
-  padding: 3.75rem 1.4rem 3rem;
-  box-shadow:
-    0 1px 1px rgba(0, 0, 0, 0.25),
-    0 12px 28px rgba(0, 0, 0, 0.45),
-    0 30px 60px rgba(0, 0, 0, 0.25);
+  padding: 3.75rem 1.4rem 2.5rem;
+  box-shadow: var(--shadow-sheet);
 }
 .dc-sheet.alt { background-image: url("/assets/paper-2.webp"); }
-@media (min-width: 720px) {
-  .dc-sheet { padding: 4.75rem 4.25rem 3.75rem; }
-}
+@media (min-width: 720px) { .dc-sheet { padding: 4.5rem 4.25rem 3.25rem; } }
 
-.dc-tape {
-  position: absolute;
-  width: 9.5rem;
-  height: auto;
-  top: -0.9rem;
-  z-index: 3;
-  opacity: 0.92;
-  pointer-events: none;
-}
-.dc-tape.l { left: -2.4rem; transform: rotate(-34deg); }
-.dc-tape.r { right: -2.4rem; transform: rotate(31deg); }
+/* Objects: on top of the sheet, casting their own shadow */
+.dc-obj { position: absolute; z-index: 4; pointer-events: none; height: auto; filter: var(--shadow-object); }
+.dc-clip { width: 3.6rem; top: -1.1rem; left: 1.4rem; transform: rotate(-12deg); }
+@media (min-width: 720px) { .dc-clip { width: 4.4rem; left: 2.6rem; } }
+.dc-sticker { width: 5.2rem; right: -0.9rem; bottom: -1.6rem; }
+.dc-sheet.has-sticker { padding-bottom: 5rem; }
+@media (min-width: 720px) { .dc-sticker { width: 6.5rem; right: -2rem; bottom: -1.8rem; } .dc-sheet.has-sticker { padding-bottom: 3.25rem; } }
 
-.dc-mark {
-  position: absolute;
-  pointer-events: none;
-  mix-blend-mode: multiply;
-  z-index: 1;
-}
+/* Under the sheet: a receipt that was in the same pocket */
+.dc-under { position: absolute; z-index: 1; pointer-events: none; height: auto; filter: var(--shadow-object); }
+.dc-receipt { width: 9rem; top: 5rem; right: -3.5rem; }
+.dc-receipt.l { right: auto; left: -4rem; top: 12rem; }
+@media (max-width: 719px) { .dc-under { display: none; } }
 
-.dc-sheet > *:not(.dc-mark):not(.dc-tape) { position: relative; z-index: 2; }
+/* Stains: inside the sheet, multiplied into the paper, kept to the edges */
+.dc-mark { position: absolute; z-index: 1; pointer-events: none; mix-blend-mode: multiply; height: auto; }
+.dc-sheet-clip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
+.dc-sheet > *:not(.dc-obj):not(.dc-sheet-clip) { position: relative; z-index: 2; }
 
 /* ---------- typed text ---------- */
 
 .dc-meta {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 0.75rem 1rem;
-  font-size: 0.85rem;
+  gap: 0.5rem 1rem;
+  font-family: var(--type);
+  font-size: 0.9rem;
   color: var(--ink-soft);
-  margin-bottom: 1.6rem;
+  margin-bottom: 1.75rem;
+}
+.dc-no { position: relative; display: inline-block; color: var(--ink); }
+.dc-no .ring {
+  position: absolute;
+  left: -38%;
+  top: -85%;
+  width: 176%;
+  max-width: none;
+  height: auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
 }
 
-.dc-stamp {
-  position: relative;
-  display: inline-block;
-  font-family: var(--type);
-  font-size: 0.95rem;
-  letter-spacing: 0.12em;
-  color: var(--pen);
-  border: 2.5px solid var(--pen);
-  padding: 0.2rem 0.55rem 0.1rem;
-  transform: rotate(-4deg);
-  opacity: 0.82;
-  mix-blend-mode: multiply;
-}
-.dc-stamp .ring {
-  position: absolute;
-  left: -42%;
-  top: -70%;
-  width: 184%;
-  max-width: none;
-  height: 240%;
-  pointer-events: none;
+.dc-ink { filter: url(#dc-ink); }
+.dc-lp {
+  -webkit-mask-image: url("/assets/letterpress-mask.png");
+  mask-image: url("/assets/letterpress-mask.png");
+  -webkit-mask-size: 340px auto;
+  mask-size: 340px auto;
 }
 
 .dc-title {
   font-family: var(--type);
   font-weight: 400;
-  font-size: 1.85rem;
+  font-size: 1.9rem;
   line-height: 1.22;
   margin: 0 0 1.9rem;
   text-wrap: balance;
 }
-@media (min-width: 720px) { .dc-title { font-size: 2.35rem; } }
+@media (min-width: 720px) { .dc-title { font-size: 2.45rem; } }
 
-.dc-w {
-  display: inline-block;
-  white-space: nowrap;
-}
+.dc-w { display: inline-block; white-space: nowrap; }
 
 .dc-body {
   font-family: var(--type);
+  font-feature-settings: "calt" 1;
   font-size: 1.04rem;
-  line-height: 1.78;
+  line-height: 1.8;
 }
 @media (min-width: 720px) { .dc-body { font-size: 1.12rem; } }
 .dc-body p { margin: 0 0 1.25em; }
 
 .dc-hl {
   background: url("/assets/highlight-1.webp") center 55% / 103% 100% no-repeat;
-  mix-blend-mode: multiply;
   padding: 0 0.12em;
   margin: 0 -0.12em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-.dc-hl.v2 { background-image: url("/assets/highlight-2.webp"); }
-.dc-hl.v2 { background-size: 104% 90%; }
-.dc-hl.v3 { background-image: url("/assets/highlight-3.webp"); background-size: 102% 120%; }
 
-/* ---------- the hand ---------- */
+/* ---------- the hand (scans only) ---------- */
 
 .dc-sign-row {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.4rem;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.75rem;
 }
-.dc-sign {
-  font-family: var(--hand);
-  font-size: 2.6rem;
-  line-height: 1;
-  color: var(--biro);
-  transform: rotate(-5deg);
-  transform-origin: left bottom;
-}
-.dc-note {
-  display: flex;
-  align-items: flex-end;
-  gap: 0.35rem;
-  margin-left: auto;
-  font-family: var(--hand);
-  font-size: 1.85rem;
-  line-height: 1;
-  color: var(--pen);
-  transform: rotate(-3deg);
-  max-width: 17rem;
-  text-align: right;
-}
-.dc-note img {
-  width: 2.6rem;
-  height: auto;
-  transform: scaleX(-1) rotate(-15deg);
-  mix-blend-mode: multiply;
-  flex: none;
-}
+.dc-sign { width: 9.5rem; height: auto; mix-blend-mode: multiply; transform: rotate(-4deg); margin-left: -0.4rem; }
+.dc-note { height: auto; mix-blend-mode: multiply; margin-left: auto; max-width: 62%; }
 
-/* ---------- prev / next, on the desk ---------- */
+/* ---------- turning pages, on the desk ---------- */
 
 .dc-turn {
+  text-shadow: 0 1px 2px rgba(0,0,0,.6);
   display: flex;
   justify-content: space-between;
   gap: 1rem;
   margin-top: 1.75rem;
-  font-size: 0.95rem;
 }
-.dc-turn a { color: var(--desk-ink); }
+.dc-turn a { color: var(--desk-ink); padding: 0.6rem 0; display: inline-block; }
 .dc-turn a:hover { color: #fff; }
 
-/* ---------- the ledger (earlier pages / archive), typed on the desk ---------- */
+/* ---------- the ledger, typed onto a strip of paper ---------- */
 
-.dc-section-label {
-  font-family: var(--hand);
-  font-size: 1.9rem;
-  color: var(--desk-ink);
-  margin: 4rem 0 0.75rem;
-  transform: rotate(-1.5deg);
-  font-weight: 400;
+.dc-section { margin-top: 4.5rem; }
+.dc-section .dc-label { color: var(--desk-faint); margin: 0 0 0.9rem; }
+
+.dc-ledger {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem 1.1rem;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: var(--shadow-sheet);
+  transform: rotate(-0.35deg);
 }
-
-.dc-ledger { list-style: none; margin: 0; padding: 0; }
-.dc-ledger li { border-bottom: 1px dashed rgba(216, 208, 187, 0.22); }
+.dc-ledger li { border-bottom: 1px solid var(--card-rule); }
+.dc-ledger li:last-child { border-bottom: 0; }
 .dc-ledger a {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  grid-template-columns: 2.8rem minmax(0, 1fr) auto;
   gap: 0.9rem;
   align-items: baseline;
-  padding: 0.8rem 0.1rem;
-  color: var(--desk-ink);
+  padding: 0.75rem 0;
+  font-family: var(--type);
   font-variant-numeric: tabular-nums;
 }
-.dc-ledger .n, .dc-ledger .d { font-size: 0.85rem; color: var(--desk-faint); }
+.dc-ledger .n, .dc-ledger .d { font-size: 0.85rem; color: var(--ink-soft); }
 .dc-ledger .t { font-size: 1.05rem; line-height: 1.4; }
-.dc-ledger a:hover .t { color: #fff; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
-.dc-ledger .today {
-  font-family: var(--hand);
-  color: #ff6b5e;
-  font-size: 1.35rem;
-  margin-left: 0.5rem;
-  display: inline-block;
-  transform: rotate(-6deg);
-}
+.dc-ledger a:hover .t { text-decoration: underline; text-decoration-color: var(--pen); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+.dc-ledger .today { color: var(--pen); font-family: var(--label); font-weight: 700; font-size: 0.7rem; letter-spacing: 0.16em; margin-left: 0.6rem; }
 
-.dc-more { display: inline-block; margin-top: 1.1rem; font-size: 0.95rem; color: var(--desk-ink); }
+.dc-more { display: inline-block; margin-top: 1.1rem; padding: 0.5rem 0; color: var(--desk-ink); }
 .dc-more:hover { color: #fff; }
 
 /* ---------- index card sign-up ---------- */
@@ -309,21 +253,21 @@ body.dc::before {
   margin: 4rem auto 0;
   max-width: 30rem;
   background-color: var(--card);
-  background-image:
-    repeating-linear-gradient(transparent 0 calc(1.7rem - 1px), var(--card-rule) calc(1.7rem - 1px) 1.7rem);
+  background-image: repeating-linear-gradient(transparent 0 calc(1.7rem - 1px), var(--card-rule) calc(1.7rem - 1px) 1.7rem);
   background-position: 0 0.85rem;
   color: var(--ink);
   padding: 0.85rem 1.25rem 1.35rem;
-  transform: rotate(1.2deg);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+  transform: rotate(1deg);
+  box-shadow: var(--shadow-sheet);
+  font-family: var(--type);
 }
 .dc-card label {
   display: block;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   line-height: 1.7rem;
   margin: 0 -1.25rem 1.7rem;
   padding: 0 1.25rem;
-  border-bottom: 1.5px solid rgba(195, 20, 31, 0.55);
+  border-bottom: 1.5px solid rgba(200, 16, 46, .55);
 }
 .dc-card-row { display: flex; gap: 0.75rem; align-items: flex-end; }
 
@@ -333,24 +277,26 @@ body.dc::before {
   background: transparent;
   border: 0;
   border-bottom: 1.5px solid var(--ink);
-  font-family: var(--hand);
-  font-size: 1.6rem;
-  color: var(--biro);
+  font-family: var(--type);
+  font-size: 1rem;
+  color: var(--ink);
   padding: 0 0.1rem;
   height: 1.7rem;
-  line-height: 1.7rem;
   outline: none;
   border-radius: 0;
 }
-.dc-input::placeholder { color: rgba(31, 60, 143, 0.4); }
+.dc-input::placeholder { color: rgba(27, 25, 21, .4); }
 
 .dc-btn {
-  font-family: var(--type);
-  font-size: 0.9rem;
+  font-family: var(--label);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--ink);
   background: transparent;
-  border: 1.5px solid var(--ink);
-  padding: 0.35rem 0.85rem 0.25rem;
+  border: 2px solid var(--ink);
+  padding: 0 0.9rem;
   cursor: pointer;
   min-height: 2.75rem;
 }
@@ -375,15 +321,14 @@ body.dc::before {
   padding: 0;
   border-radius: 0;
 }
-.dc-field.title { font-size: 1.85rem; line-height: 1.25; margin-bottom: 1.5rem; }
-.dc-field.body { font-size: 1.08rem; line-height: 1.78; min-height: 55vh; resize: vertical; }
-.dc-field.hand { font-family: var(--hand); font-size: 1.6rem; color: var(--pen); }
-.dc-field::placeholder { color: rgba(27, 25, 21, 0.38); }
+.dc-field.title { font-size: 1.9rem; line-height: 1.25; margin-bottom: 1.5rem; }
+.dc-field.body { font-size: 1.08rem; line-height: 1.8; min-height: 55vh; resize: vertical; }
+.dc-field::placeholder { color: rgba(27, 25, 21, .38); }
 
 @media (prefers-reduced-motion: no-preference) {
-  .dc-drop { animation: dc-drop 0.55s cubic-bezier(.2, .7, .2, 1) both; }
+  .dc-drop { animation: dc-drop .6s cubic-bezier(.3, 1.3, .5, 1) backwards; }
   @keyframes dc-drop {
-    from { transform: translateY(-10px) rotate(var(--tilt, 0deg)) scale(1.01); box-shadow: 0 30px 70px rgba(0,0,0,.6); }
-    to { transform: rotate(var(--tilt, 0deg)); }
+    from { opacity: 0; transform: translateY(-28px) rotate(calc(var(--tilt, 0deg) - 2deg)); }
+    to { opacity: 1; transform: rotate(var(--tilt, 0deg)); }
   }
 }

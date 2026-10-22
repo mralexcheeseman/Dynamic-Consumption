@@ -1,18 +1,19 @@
 // Deterministic "hand" for each page: the same post always gets the same
-// wobble, ink and marks, so it reads like one physical sheet, not a random effect.
+// wobble, marks and objects, so it reads like one physical sheet.
 
 export function hash(n) {
-  return ((n * 2654435761) >>> 0) % 9973;
+  return (Math.imul(n | 0, 2654435761) >>> 0) % 9973;
 }
 
-// Typewriter words: each one sits a little off the line, with uneven ribbon ink.
+// Typewriter words: each one sits a little off the line (±1.2px, ±0.66°),
+// with uneven ribbon ink.
 export function Typed({ text, salt = 1 }) {
   const words = text.split(/\s+/).filter(Boolean);
   return words.map((w, i) => {
     const r = hash(salt * 131 + i * 31 + 7);
-    const y = ((r % 5) - 2) * 0.45;
-    const rot = ((r % 7) - 3) * 0.18;
-    const ink = 0.8 + ((r >> 3) % 21) / 100;
+    const y = ((r % 5) - 2) * 0.6;
+    const rot = ((r % 7) - 3) * 0.22;
+    const ink = 0.82 + ((r >> 3) % 19) / 100;
     return (
       <span key={i}>
         <span className="dc-w" style={{ transform: `translateY(${y}px) rotate(${rot}deg)`, opacity: ink }}>{w}</span>
@@ -38,24 +39,25 @@ export function TypedPara({ text, highlight, salt, variant }) {
   );
 }
 
-const corners = [
-  { right: "-8rem", top: "9rem" },
-  { left: "-8rem", bottom: "5rem" },
-  { right: "-6rem", bottom: "-5rem" },
-  { left: "-7rem", top: "-6rem" },
+// Coffee only ever bleeds in from an edge, never over the title or the highlight.
+const coffeeSlots = [
+  { right: "-7rem", bottom: "-6rem" },
+  { left: "-7.5rem", bottom: "-5rem" },
+  { right: "-8rem", top: "40%" },
 ];
 
-// The marks a page picks up while it sits on the desk.
+// What a page picked up while it sat on the desk.
 export function sheetMarks(n) {
   const r = hash(n * 97 + 13);
   return {
-    tilt: (((r % 9) - 4) * 0.14).toFixed(2),
+    tilt: (((r % 9) - 4) * 0.16).toFixed(2),
     alt: r % 2 === 1,
-    highlight: r % 3 === 0 ? 1 : 3,
-    tapeL: r % 2 ? "tape-1" : "tape-2",
-    tapeR: r % 2 ? "tape-2" : "tape-1",
-    coffee: n % 3 === 0 ? { src: `coffee-${(r % 3) + 1}`, pos: corners[r % corners.length], rot: r % 360 } : null,
-    circleStamp: n % 4 === 1,
+    highlight: 1,
+    clipRot: -8 - (r % 9),
+    coffee: n % 3 === 0 ? { src: `coffee-${(r % 3) + 1}`, pos: coffeeSlots[r % coffeeSlots.length], rot: r % 360 } : null,
+    receipt: n % 4 === 2 ? (r % 2 ? "r" : "l") : null,
+    sticker: n % 7 === 4,
+    ring: n % 5 === 1,
   };
 }
 
@@ -66,7 +68,20 @@ export function Coffee({ mark }) {
       className="dc-mark"
       src={`/assets/${mark.src}.webp`}
       alt=""
-      style={{ ...mark.pos, width: "16rem", opacity: 0.45, transform: `rotate(${mark.rot}deg)` }}
+      aria-hidden="true"
+      style={{ ...mark.pos, width: "17rem", opacity: 0.5, transform: `rotate(${mark.rot}deg)` }}
     />
+  );
+}
+
+// The SVG ink filter used on typed headlines: a hair of bleed along the strokes.
+export function InkFilter() {
+  return (
+    <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
+      <filter id="dc-ink">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="11" result="n" />
+        <feDisplacementMap in="SourceGraphic" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </svg>
   );
 }

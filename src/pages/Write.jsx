@@ -7,7 +7,7 @@ import Desk, { Paper, useDocTitle, pad, todayIso, longDate } from "@/components/
 import { sheetMarks } from "@/components/marks";
 import Ledger from "@/components/Ledger";
 
-const blank = { id: null, title: "", body: "", highlight: "", note: "" };
+const blank = { id: null, title: "", body: "", highlight: "" };
 
 export default function Write() {
   useDocTitle("Write");
@@ -68,7 +68,6 @@ export default function Write() {
       title: draft.title.trim(),
       body: draft.body.trim(),
       highlight: draft.highlight.trim(),
-      note: draft.note.trim(),
       status,
     };
     if (status === "published") fields.published_on = todayIso();
@@ -90,7 +89,7 @@ export default function Write() {
     <Desk>
       <Paper marks={sheetMarks(draft.id ? 2 : nextNumber)}>
         <div className="dc-meta">
-          <span className="dc-stamp">{draft.id ? "Draft" : `No. ${pad(nextNumber)}`}</span>
+          <span className="dc-no">{draft.id ? "Draft" : `No. ${pad(nextNumber)}`}</span>
           <span>{longDate(todayIso())} · {words} words</span>
         </div>
 
@@ -105,10 +104,6 @@ export default function Write() {
         </label>
         <input id="w-hl" className="dc-field" style={{ borderBottom: "1px dashed var(--ink-soft)", padding: "0.3rem 0" }} value={draft.highlight} onChange={set("highlight")} />
 
-        <label htmlFor="w-note" className="dc-small" style={{ display: "block", marginTop: "1rem", color: "var(--ink-soft)" }}>
-          Note in the margin (red pen, keep it short)
-        </label>
-        <input id="w-note" className="dc-field hand" style={{ borderBottom: "1px dashed var(--ink-soft)" }} maxLength={40} value={draft.note} onChange={set("note")} />
       </Paper>
 
       <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap", marginTop: "1.5rem" }}>
@@ -119,12 +114,12 @@ export default function Write() {
       </div>
 
       {drafts.length > 0 && (
-        <section>
-          <h2 className="dc-section-label">drafts (only you see these)</h2>
+        <section className="dc-section">
+          <h2 className="dc-label">Drafts (only you see these)</h2>
           <ul className="dc-ledger">
             {drafts.map((p) => (
               <li key={p.id}>
-                <a href="#" onClick={(e) => { e.preventDefault(); setDraft({ ...blank, ...p }); window.scrollTo(0, 0); }}>
+                <a href="#" onClick={(e) => { e.preventDefault(); setDraft({ id: p.id, title: p.title, body: p.body, highlight: p.highlight || "" }); window.scrollTo(0, 0); }}>
                   <span className="n">{pad(p.number)}</span>
                   <span className="t">{p.title}</span>
                   <span className="d">draft</span>
@@ -135,7 +130,7 @@ export default function Write() {
         </section>
       )}
 
-      <h2 className="dc-section-label">published</h2>
+      <h2 className="dc-label" style={{ color: "var(--desk-faint)", margin: "4rem 0 0.9rem" }}>Published</h2>
       <Ledger posts={all.filter((p) => p.status === "published").slice(0, 10)} />
     </Desk>
   );

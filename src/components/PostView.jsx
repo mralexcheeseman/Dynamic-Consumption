@@ -9,17 +9,17 @@ export default function PostView({ post, prev, next, withSubscribe = true }) {
   return (
     <>
       <Paper marks={m}>
-        <Coffee mark={m.coffee} />
+        <div className="dc-sheet-clip"><Coffee mark={m.coffee} /></div>
 
         <div className="dc-meta">
-          <span className="dc-stamp">
+          <span className="dc-no">
             No. {pad(post.number)}
-            {m.circleStamp && <img className="ring" src="/assets/pen-circle.webp" alt="" />}
+            {m.ring && <img className="ring" src="/assets/pen-circle.webp" alt="" aria-hidden="true" />}
           </span>
           <span>{longDate(post.published_on)}</span>
         </div>
 
-        <h1 className="dc-title">
+        <h1 className="dc-title dc-ink">
           <Typed text={post.title} salt={post.number * 7} />
         </h1>
 
@@ -30,17 +30,19 @@ export default function PostView({ post, prev, next, withSubscribe = true }) {
         </div>
 
         <div className="dc-sign-row">
-          <span className="dc-sign" aria-label="Signed, Alex">Alex</span>
-          {post.note && (
-            <span className="dc-note">
-              <img src="/assets/pen-arrow.webp" alt="" />
-              <span>{post.note}</span>
-            </span>
+          <img className="dc-sign" src="/assets/signature.webp" alt="Signed, Alex" />
+          {post.note_image && (
+            <img
+              className="dc-note"
+              src={post.note_image}
+              alt={post.note ? `Margin note: ${post.note}` : ""}
+              style={{ width: "13rem", transform: `rotate(${-2 - (post.number % 4)}deg)` }}
+            />
           )}
         </div>
       </Paper>
 
-      <nav className="dc-turn" aria-label="Other pages">
+      <nav className="dc-turn dc-label" aria-label="Other pages">
         <span>{prev && <Link to={`/p/${prev.number}`}>← No. {pad(prev.number)}</Link>}</span>
         <span>{next && <Link to={`/p/${next.number}`}>No. {pad(next.number)} →</Link>}</span>
       </nav>

@@ -8,11 +8,10 @@ export default function Archive() {
 
   return (
     <Desk>
-      <h1 className="dc-section-label" style={{ marginTop: 0, fontSize: "2.4rem" }}>every page so far</h1>
-      <p className="dc-small" style={{ color: "var(--desk-faint)", margin: "0 0 1.5rem" }}>
-        {isLoading ? "Counting…" : `${posts.length} of them. Newest on top.`}
-      </p>
-      <Ledger posts={posts} />
+      <section className="dc-section" style={{ marginTop: 0 }}>
+        <h1 className="dc-label">{isLoading ? "Counting…" : `Every page so far · ${posts.length}`}</h1>
+        <Ledger posts={posts} />
+      </section>
     </Desk>
   );
 }

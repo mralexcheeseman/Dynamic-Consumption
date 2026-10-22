@@ -17,10 +17,10 @@ export default function Home() {
       <PostView post={latest} prev={earlier[0]} />
 
       {earlier.length > 0 && (
-        <section>
-          <h2 className="dc-section-label">earlier pages</h2>
+        <section className="dc-section">
+          <h2 className="dc-label">Earlier pages</h2>
           <Ledger posts={earlier.slice(0, 7)} />
-          <Link to="/archive" className="dc-more">All {posts.length} pages →</Link>
+          <Link to="/archive" className="dc-more dc-label">All {posts.length} pages →</Link>
         </section>
       )}
     </Desk>
