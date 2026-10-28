@@ -8,7 +8,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
 const items = (res) => (Array.isArray(res) ? res : res?.items || []);
 const valid = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e) && e.length <= 254;
 
-export default async function (req) {
+Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const { email: raw } = await req.json().catch(() => ({}));
@@ -26,4 +26,4 @@ export default async function (req) {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-}
+});

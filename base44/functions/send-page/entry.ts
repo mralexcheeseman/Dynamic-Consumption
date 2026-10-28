@@ -1,6 +1,6 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.54';
 
-// Emails one published page to every subscriber, through Resend.
+// send-page: emails one published page to every subscriber, through Resend.
 // Called from /write right after Publish. Admin only.
 //
 // POST { post_id }               send to all subscribers (once; a second call is skipped)
@@ -69,7 +69,7 @@ function text(post, unsubUrl) {
   ].join('\n');
 }
 
-export default async function (req) {
+Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     let admin = null;
@@ -138,4 +138,4 @@ export default async function (req) {
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-}
+});

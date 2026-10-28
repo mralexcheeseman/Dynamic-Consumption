@@ -72,7 +72,7 @@ export default function Write() {
 
   const emailOut = async (post) => {
     try {
-      const r = await callFn("sendPage", { post_id: post.id });
+      const r = await callFn("send-page", { post_id: post.id });
       if (r.not_configured) return " Not emailed: emails are off until a sending domain is set up.";
       if (r.skipped) return ` ${r.skipped}`;
       if (r.errors?.length) return ` Emailed ${r.sent} of ${r.subscribers}; some failed.`;
@@ -129,7 +129,7 @@ export default function Write() {
     if (!latest) return setMsg("Publish a page first.");
     setBusy(true);
     try {
-      const r = await callFn("sendPage", { post_id: latest.id, test: true });
+      const r = await callFn("send-page", { post_id: latest.id, test: true });
       setMsg(`Sent No. ${pad(latest.number)} to ${r.to} as a test.`);
     } catch (e) {
       setMsg(`Test didn't send: ${e?.response?.data?.error || e.message}`);

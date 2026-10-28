@@ -25,7 +25,7 @@
           "call": "invoke_backend_function",
           "then": "end",
           "with": {
-            "function_name": "morningNudge",
+            "function_name": "morning-nudge",
             "payload": { "key": "<DC_KEY: set in Base44 secrets>" }
           }
         }

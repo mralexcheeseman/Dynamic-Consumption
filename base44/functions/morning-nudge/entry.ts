@@ -26,7 +26,7 @@ function streakFrom(days, today, doneToday) {
   return n;
 }
 
-export default async function (req) {
+Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const payload = await req.json().catch(() => ({}));
@@ -83,4 +83,4 @@ ${draftLine}
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }
-}
+});
