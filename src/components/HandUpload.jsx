@@ -5,7 +5,7 @@ import { liftInk, toFile } from "@/lib/ink";
 // Photograph something written on paper; the ink is lifted off, previewed on the
 // page's own paper, and uploaded only when you keep it.
 // onKeep({ url, width }) gets the stored file's URL and its width in pixels.
-export default function HandUpload({ id, label, hint, lineHeight = 110, name = "hand", previewWidth, onKeep, current }) {
+export default function HandUpload({ id, label, hint, lineHeight = 110, name = "hand", previewWidth, onKeep, current, taken = Boolean(current) }) {
   const input = useRef(null);
   const [lifted, setLifted] = useState(null);
   const [state, setState] = useState("idle"); // idle | lifting | ready | saving | error
@@ -51,7 +51,7 @@ export default function HandUpload({ id, label, hint, lineHeight = 110, name = "
         <label htmlFor={id} className="dc-small">{label}</label>
         <input id={id} ref={input} type="file" accept="image/*" capture="environment" onChange={pick} className="sr-only" />
         <button type="button" className="dc-btn" onClick={() => input.current?.click()} disabled={state === "lifting" || state === "saving"}>
-          {state === "lifting" ? "Lifting ink…" : shown ? "Retake" : "Photograph it"}
+          {state === "lifting" ? "Lifting ink…" : lifted || taken ? "Retake" : "Photograph it"}
         </button>
       </div>
       {hint && !shown && <p className="dc-small dc-hint">{hint}</p>}

@@ -226,6 +226,7 @@ export default function Write() {
             label={signature === DEFAULT_SIGNATURE ? "The one on the pages is a stand-in. Sign plain white paper in blue biro and photograph it." : "Signed in your own hand. Retake it any time."}
             lineHeight={290}
             current={signature}
+            taken={signature !== DEFAULT_SIGNATURE}
             previewWidth={() => "9.5rem"}
             onKeep={keepSignature}
           />

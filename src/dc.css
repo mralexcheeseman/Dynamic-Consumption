@@ -124,7 +124,7 @@ body.dc::before {
 /* Stains: inside the sheet, multiplied into the paper, kept to the edges */
 .dc-mark { position: absolute; z-index: 1; pointer-events: none; mix-blend-mode: multiply; height: auto; }
 .dc-sheet-clip { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 1; }
-.dc-sheet > *:not(.dc-obj):not(.dc-sheet-clip) { position: relative; z-index: 2; }
+.dc-sheet > *:not(.dc-obj):not(.dc-sheet-clip):not(.sr-only) { position: relative; z-index: 2; }
 
 /* ---------- typed text ---------- */
 
@@ -330,7 +330,8 @@ body.dc::before {
   border-radius: 0;
 }
 .dc-field.title { font-size: 1.9rem; line-height: 1.25; margin-bottom: 1.5rem; }
-.dc-field.body { font-size: 1.08rem; line-height: 1.8; min-height: 55vh; resize: vertical; }
+.dc-field.body { font-size: 1.08rem; line-height: 1.8; min-height: 40vh; resize: vertical; }
+@media (min-width: 720px) { .dc-field.body { min-height: 55vh; } }
 .dc-field::placeholder { color: rgba(27, 25, 21, .38); }
 
 @media (prefers-reduced-motion: no-preference) {
