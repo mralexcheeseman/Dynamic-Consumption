@@ -1,0 +1,36 @@
+{
+  "name": "Morning nudge",
+  "description": "07:00 and 20:00 London: emails Alex if today's page isn't published yet; silent otherwise.",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 7,20 * * *",
+      "one_time_date": null,
+      "timezone": "Europe/London",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "do": [
+      {
+        "nudge": {
+          "call": "invoke_backend_function",
+          "then": "end",
+          "with": {
+            "function_name": "morningNudge",
+            "payload": { "key": "<DC_KEY: set in Base44 secrets>" }
+          }
+        }
+      }
+    ],
+    "document": { "dsl": "1.0.0", "name": "morning-nudge", "namespace": "base44", "version": "1.0.0" }
+  }
+}

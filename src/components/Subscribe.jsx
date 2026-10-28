@@ -11,7 +11,7 @@ export default function Subscribe() {
     if (!email.includes("@")) return;
     setState("sending");
     try {
-      await base44.entities.Subscriber.create({ email: email.trim().toLowerCase() });
+      await base44.functions.invoke("subscribe", { email: email.trim() });
       setState("done");
     } catch {
       setState("error");

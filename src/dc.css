@@ -340,3 +340,17 @@ body.dc::before {
     to { opacity: 1; transform: rotate(var(--tilt, 0deg)); }
   }
 }
+
+/* ---------- photographing your own hand (on /write) ---------- */
+
+.dc-hand { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px dashed rgba(27, 25, 21, .3); }
+.dc-hand-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; }
+.dc-hand-head label { color: var(--ink-soft); }
+.dc-hint { color: var(--ink-soft); margin: 0.5rem 0 0; }
+.dc-hand-preview { margin-top: 0.8rem; display: flex; justify-content: flex-end; }
+.dc-hand-preview img { height: auto; max-width: 100%; mix-blend-mode: multiply; transform: rotate(-2deg); }
+.dc-hand-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 0.6rem; }
+.dc-card-flat { transform: none; margin: 0; max-width: none; background-image: none; }
+.dc-card-flat .dc-hand { margin-top: 0; padding-top: 0; border-top: 0; }
+.dc-card-flat .dc-hand-preview { justify-content: flex-start; }
+.dc-card-flat label { display: inline; margin: 0; padding: 0; border: 0; }

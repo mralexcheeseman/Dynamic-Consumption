@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
 import { Paper, pad, longDate } from "@/components/Sheet";
 import { Typed, TypedPara, sheetMarks, Coffee, MarginNote } from "@/components/marks";
-import { paragraphs } from "@/components/posts";
+import { paragraphs, useSignature } from "@/components/posts";
 import Subscribe from "@/components/Subscribe";
 
 export default function PostView({ post, prev, next, withSubscribe = true }) {
   const m = sheetMarks(post.number);
+  const signature = useSignature();
   return (
     <>
       <Paper marks={m}>
@@ -31,13 +32,13 @@ export default function PostView({ post, prev, next, withSubscribe = true }) {
               highlight={post.highlight}
               salt={post.number * 100 + i * 11}
               variant={m.highlight}
-              note={<MarginNote src={post.note_image} alt={post.note} seed={post.number} />}
+              note={<MarginNote src={post.note_image} alt={post.note} seed={post.number} width={post.note_width} />}
             />
           ))}
         </div>
 
         <div className="dc-sign-row">
-          <img className="dc-sign" src="/assets/signature.webp" alt="Signed, Alex" />
+          <img className="dc-sign" src={signature} alt="Signed, Alex" />
         </div>
       </Paper>
 

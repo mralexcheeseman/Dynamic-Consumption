@@ -11,6 +11,7 @@ import Post from './pages/Post';
 import Archive from './pages/Archive';
 import About from './pages/About';
 import Write from './pages/Write';
+import Unsubscribe from './pages/Unsubscribe';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ForgotPassword from './pages/ForgotPassword';
@@ -43,6 +44,7 @@ const AuthenticatedApp = () => {
       <Route path="/archive" element={<Archive />} />
       <Route path="/about" element={<About />} />
       <Route path="/write" element={<Write />} />
+      <Route path="/unsubscribe" element={<Unsubscribe />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />

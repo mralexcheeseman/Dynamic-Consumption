@@ -1,6 +1,7 @@
 import Desk, { Paper, useDocTitle } from "@/components/Sheet";
 import { Typed, TypedPara, sheetMarks, MarginNote } from "@/components/marks";
 import Subscribe from "@/components/Subscribe";
+import { useSignature } from "@/components/posts";
 
 const lines = [
   "I'm Alex Cheeseman. I make brands and the things they sell.",
@@ -11,6 +12,7 @@ const lines = [
 
 export default function About() {
   useDocTitle("About");
+  const signature = useSignature();
   const m = { ...sheetMarks(5), sticker: false, receipt: "r", coffee: null };
   return (
     <Desk>
@@ -23,7 +25,7 @@ export default function About() {
           ))}
         </div>
         <div className="dc-sign-row">
-          <img className="dc-sign" src="/assets/signature.webp" alt="Signed, Alex" />
+          <img className="dc-sign" src={signature} alt="Signed, Alex" />
           <MarginNote src="/assets/note-about.webp" alt="see you tomorrow" seed={3} />
         </div>
       </Paper>

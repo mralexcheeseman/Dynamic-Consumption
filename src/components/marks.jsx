@@ -44,10 +44,11 @@ export function TypedPara({ text, highlight, salt, variant, note }) {
 // Drawn at 0.025rem per pixel so the hand comes out at typing size.
 const NOTE_WIDTHS = {"note-1": 494, "note-2": 374, "note-3": 270, "note-4": 273, "note-5": 373, "note-6": 238, "note-7": 382, "note-8": 464, "note-9": 546, "note-10": 258, "note-11": 475, "note-12": 462, "note-13": 348, "note-14": 407, "note-about": 445};
 
-export function MarginNote({ src, alt, seed = 1 }) {
+// Uploaded notes carry their own width (they are normalised to one 110px line on upload).
+export function MarginNote({ src, alt, seed = 1, width }) {
   if (!src) return null;
   const key = src.split("/").pop().replace(".webp", "");
-  const px = NOTE_WIDTHS[key] || 380;
+  const px = width || NOTE_WIDTHS[key] || 380;
   const r = hash(seed * 53 + 5);
   return (
     <img
