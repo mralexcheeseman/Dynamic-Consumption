@@ -20,6 +20,9 @@ const TYPE = "'Courier Prime','Courier New',Courier,monospace";
 const items = (res) => (Array.isArray(res) ? res : res?.items || []);
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const abs = (u) => (!u ? '' : /^https?:/.test(u) ? u : `${SITE}${u.startsWith('/') ? '' : '/'}${u}`);
+// Mail apps (Gmail on iPhone especially) draw transparent WebP on black. The site's own
+// hand-written images have flat PNG twins on the paper colour in /assets/email/.
+const emailSafe = (u) => abs(String(u || '').replace(/^\/assets\/([\w-]+)\.webp$/, '/assets/email/$1.png'));
 const pad = (n) => String(n ?? 0).padStart(3, '0');
 const longDate = (iso) => (iso ? new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }) : '');
 const paragraphs = (body) => String(body || '').split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
@@ -33,7 +36,7 @@ function html(post, signature, unsubUrl) {
       inner = inner.replace(esc(post.highlight), `<span style="background:${C.hl}">${esc(post.highlight)}</span>`);
       if (post.note_image) {
         const w = Math.round((post.note_width || 380) * 0.4);
-        note = `<div style="text-align:right;margin:6px 0 0"><img src="${esc(abs(post.note_image))}" alt="${esc(post.note || '')}" width="${w}" style="width:${w}px;max-width:70%;height:auto"></div>`;
+        note = `<div style="text-align:right;margin:6px 0 0"><img src="${esc(emailSafe(post.note_image))}" alt="${esc(post.note || '')}" width="${w}" style="width:${w}px;max-width:70%;height:auto"></div>`;
       }
     }
     return `<p style="margin:0 0 18px">${inner}</p>${note}`;
@@ -44,7 +47,7 @@ function html(post, signature, unsubUrl) {
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;background:${C.paper};color:${C.ink};font-family:${TYPE};font-size:16px;line-height:1.7">
 <tr><td style="padding:36px 32px 8px;font-size:13px;color:${C.soft}">No. ${pad(post.number)} &nbsp;·&nbsp; ${esc(longDate(post.published_on))}</td></tr>
 <tr><td style="padding:8px 32px 6px"><h1 style="margin:0 0 18px;font-family:${TYPE};font-weight:400;font-size:26px;line-height:1.25">${esc(post.title)}</h1>${paras}</td></tr>
-<tr><td style="padding:0 32px 30px"><img src="${esc(abs(signature))}" alt="Alex" width="140" style="width:140px;height:auto"></td></tr>
+<tr><td style="padding:0 32px 30px"><img src="${esc(emailSafe(signature))}" alt="Alex" width="140" style="width:140px;height:auto"></td></tr>
 </table>
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;font-family:${TYPE};font-size:12px;line-height:1.6;color:#c4c9bb">
 <tr><td style="padding:16px 4px">

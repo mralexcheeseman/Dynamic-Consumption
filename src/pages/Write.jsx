@@ -37,7 +37,7 @@ const REACT_PROMPTS = [
 
 const blank = {
   id: null, title: "", body: "", highlight: "", note: "", note_image: "", note_width: null,
-  spark_id: "", spark: "", kind: "", reaction: "", shape: "page",
+  spark_id: "", spark: "", kind: "", reaction: "", shape: "page", wire_source: "", wire_url: "",
 };
 
 const noteSize = (px) => (px ? `${(px * 0.025).toFixed(2)}rem` : undefined);
@@ -83,9 +83,11 @@ export default function Write() {
     enabled: isAdmin,
   });
 
-  const drafts = all.filter((p) => p.status === "draft");
   const published = all.filter((p) => p.status === "published");
-  const nextNumber = Math.max(0, ...all.map((p) => p.number || 0)) + 1;
+  const wireDrafts = all.filter((p) => p.status === "draft" && p.from_wire);
+  const drafts = all.filter((p) => p.status === "draft" && !p.from_wire);
+  // Numbers count published pages only, so unused drafts never leave gaps.
+  const nextNumber = Math.max(0, ...published.map((p) => p.number || 0)) + 1;
   const words = draft.body.trim() ? draft.body.trim().split(/\s+/).length : 0;
   const sentences = useMemo(() => sentencesOf(draft.body), [draft.body]);
   const publishedToday = published.some((p) => p.published_on === todayIso());
@@ -194,6 +196,7 @@ export default function Write() {
     setBusy(true);
     setMsg("");
     const fields = {
+      ...(draft.wire_source ? { from_wire: false } : {}),
       title: draft.title.trim(),
       body: draft.body.trim(),
       highlight: draft.highlight.trim(),
@@ -206,9 +209,13 @@ export default function Write() {
       shape: draft.shape || "page",
       status,
     };
-    if (status === "published") fields.published_on = todayIso();
+    // A page takes its number when it's published.
+    const number = status === "published" ? nextNumber : (draft.id ? all.find((p) => p.id === draft.id)?.number || nextNumber : nextNumber);
+    if (status === "published") {
+      fields.published_on = todayIso();
+      fields.number = number;
+    }
     try {
-      const number = draft.id ? all.find((p) => p.id === draft.id)?.number || nextNumber : nextNumber;
       const saved = draft.id
         ? await base44.entities.Post.update(draft.id, fields)
         : await base44.entities.Post.create({ ...fields, number });
@@ -283,6 +290,23 @@ export default function Write() {
 
       {step === 0 && (
         <>
+          {wireDrafts.length > 0 && (
+            <section className="dc-wire">
+              <h2 className="dc-label">From Owl Farm's Wire · a draft waiting</h2>
+              {wireDrafts.slice(0, 1).map((p) => (
+                <div key={p.id} className="dc-card dc-card-flat">
+                  <p className="dc-small" style={{ margin: 0, color: "var(--ink-soft)" }}>
+                    Sparked by {p.wire_url ? <a href={p.wire_url} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>{p.wire_source}</a> : p.wire_source}
+                  </p>
+                  <p style={{ margin: "0.5rem 0 0", fontFamily: "var(--type)", fontSize: "1.1rem" }}>{p.title}</p>
+                  <div className="dc-row">
+                    <button type="button" className="dc-btn" onClick={() => openDraft(p)}>Make it yours →</button>
+                    <span className="dc-small" style={{ color: "var(--ink-soft)" }}>Or catch something of your own below.</span>
+                  </div>
+                </div>
+              ))}
+            </section>
+          )}
           <form className="dc-card dc-card-flat dc-spark-form" onSubmit={(e) => { e.preventDefault(); saveSpark(false); }}>
             <p className="dc-label" style={{ margin: "0 0 0.6rem" }}>Catch something</p>
             <div className="dc-chips" role="radiogroup" aria-label="What kind">
@@ -409,9 +433,16 @@ export default function Write() {
         <>
           <Paper marks={sheetMarks(draft.id ? 2 : nextNumber)}>
             <div className="dc-meta">
-              <span className="dc-no">{draft.id ? "Draft" : `No. ${pad(nextNumber)}`}</span>
+              <span className="dc-no">No. {pad(nextNumber)}</span>
               <span>{SHAPES[draft.shape]?.name || "Page"} · {words} words</span>
             </div>
+            {draft.wire_source && (
+              <p className="dc-small" style={{ color: "var(--ink-soft)", margin: "0 0 0.6rem" }}>
+                From the Wire, sparked by{" "}
+                {draft.wire_url ? <a href={draft.wire_url} target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>{draft.wire_source}</a> : draft.wire_source}
+                . Make it yours, then publish.
+              </p>
+            )}
 
             <label htmlFor="w-title" className="sr-only">Title</label>
             <input id="w-title" className="dc-field title" placeholder="Title" value={draft.title} onChange={set("title")} />

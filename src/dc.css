@@ -423,3 +423,6 @@ body.dc::before {
 .dc-details > summary::-webkit-details-marker { display: none; }
 .dc-details > summary::before { content: "+ "; }
 .dc-details[open] > summary::before { content: "– "; }
+
+.dc-wire { margin-bottom: 2rem; }
+.dc-wire .dc-label { color: var(--desk-faint); margin: 0 0 0.8rem; }

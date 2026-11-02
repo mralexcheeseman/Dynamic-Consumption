@@ -114,10 +114,8 @@ export async function liftInk(file, { lineHeight = 110, maxSide = 1800 } = {}) {
   octx.drawImage(work, cx, cy, cw, ch, 0, 0, outW, outH);
 
   const blob = await new Promise((resolve) => {
-    out.toBlob((b) => {
-      if (b && b.type === "image/webp") return resolve(b);
-      out.toBlob(resolve, "image/png");
-    }, "image/webp", 0.9);
+    // PNG, not WebP: mail apps draw transparent WebP on black in the emailed page.
+    out.toBlob(resolve, "image/png");
   });
   return { blob, url: URL.createObjectURL(blob), width: outW, height: outH };
 }
