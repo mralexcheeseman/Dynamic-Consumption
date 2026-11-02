@@ -40,7 +40,8 @@ const BANNED = `NEVER:
 - "It's not X, it's Y", "Not X, but Y", "The question isn't X. The question is Y."
 - filler: leverage, unlock, navigate, landscape, ecosystem, game-changer, journey, in today's world, delve.
 - hype words or exclamation marks; stacked rhetorical questions (one question, then an answer).
-- headings, bullets, numbering, hashtags, emoji, a sign-off or a call to subscribe.`;
+- headings, bullets, numbering, hashtags, emoji, a sign-off or a call to subscribe.
+- words from these instructions: "the sharper picture", "the old belief", "two-beat", "reframe", "the turn", "the spark".`;
 
 const DRAFT_SCHEMA = {
   type: 'object',
