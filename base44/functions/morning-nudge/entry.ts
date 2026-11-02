@@ -52,6 +52,7 @@ Deno.serve(async (req) => {
     const streak = streakFrom(days, today, done);
     const next = Math.max(0, ...posts.map((p) => p.number || 0)) + 1;
     const drafts = items(await db.Post.filter({ status: 'draft' }, '-updated_date', 20));
+    const jar = items(await db.Spark.filter({ status: 'new' }, 'created_date', 50).catch(() => []));
 
     if (done) return Response.json({ sent: false, reason: "Today's page is up.", streak });
 
@@ -60,8 +61,12 @@ Deno.serve(async (req) => {
       ? `Dynamic Consumption · No. ${String(next).padStart(3, '0')} still blank (${streakLine.toLowerCase()})`
       : `Dynamic Consumption · today's page, No. ${String(next).padStart(3, '0')}`;
     const lead = evening
-      ? 'Last call. Three lines is a page.'
-      : 'One page. Say the thing in the first line, then stop.';
+      ? 'Last call. A Note is forty words. That still counts.'
+      : 'One page: catch, react, shape, finish. About ten minutes.';
+    const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const jarLine = jar.length
+      ? `<p style="margin:16px 0 0;padding:10px 12px;border-left:3px solid ${C.soft};background:rgba(0,0,0,.04)"><span style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:${C.soft}">In the jar (${jar.length})</span><br>${esc(jar[0].text)}</p>`
+      : `<p style="margin:16px 0 0;color:${C.soft}">The jar is empty. Start with the last thing you bought, read or ate today.</p>`;
     const draftLine = drafts.length
       ? `<p style="margin:12px 0 0;color:${C.soft}">${drafts.length} draft${drafts.length === 1 ? '' : 's'} waiting, if one is nearly there.</p>`
       : '';
@@ -69,6 +74,7 @@ Deno.serve(async (req) => {
     const body = `<div style="background:${C.paper};color:${C.ink};font-family:${TYPE};font-size:16px;line-height:1.6;padding:28px;max-width:520px">
 <div style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:${C.soft}">${today} · ${streakLine}</div>
 <p style="margin:16px 0 0">${lead}</p>
+${jarLine}
 ${draftLine}
 <p style="margin:22px 0 0"><a href="${SITE}/write" style="color:${C.ink};font-weight:700;border-bottom:2px solid ${C.pen};text-decoration:none">Open the desk →</a></p>
 <p style="margin:22px 0 0;font-size:12px;color:${C.soft}">This only arrives on days without a page. Publish and it goes quiet.</p>

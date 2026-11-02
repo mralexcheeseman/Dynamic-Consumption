@@ -355,3 +355,71 @@ body.dc::before {
 .dc-card-flat .dc-hand { margin-top: 0; padding-top: 0; border-top: 0; }
 .dc-card-flat .dc-hand-preview { justify-content: flex-start; }
 .dc-card-flat label { display: inline; margin: 0; padding: 0; border: 0; }
+
+/* ---------- the daily routine on /write ---------- */
+
+.dc-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.4rem; margin-bottom: 0.6rem; }
+.dc-step {
+  font-family: var(--label); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  background: transparent; color: var(--desk-faint); border: 0; border-top: 3px solid rgba(217, 210, 191, .25);
+  padding: 0.6rem 0 0.4rem; text-align: left; cursor: pointer; min-height: 2.75rem;
+}
+.dc-step .n { font-family: var(--type); font-weight: 400; margin-right: 0.2rem; }
+.dc-step.done { color: var(--desk-ink); border-top-color: var(--desk-ink); }
+.dc-step.on { color: #fff; border-top-color: var(--pen); }
+.dc-step:disabled { cursor: default; }
+.dc-steps-note { color: var(--desk-faint); margin: 0 0 1.5rem; }
+.dc-msg { color: #fff; background: rgba(0, 0, 0, .35); padding: 0.6rem 0.8rem; border-left: 3px solid var(--pen); }
+
+.dc-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-top: 1rem; }
+.dc-row .dc-input { flex: 1 1 12rem; }
+
+.dc-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.dc-chip {
+  font-family: var(--label); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em;
+  background: transparent; color: var(--ink); border: 1.5px solid var(--ink); padding: 0 0.7rem; min-height: 2.5rem; cursor: pointer;
+}
+.dc-chip.on { background: var(--ink); color: var(--card); }
+
+.dc-spark-text { font-size: 1rem; line-height: 1.6; border-bottom: 1.5px solid var(--ink); padding: 0.3rem 0; resize: vertical; }
+.dc-spark-quote { margin: 0; padding: 0.6rem 0.8rem; background: rgba(27, 25, 21, .05); border-left: 3px solid var(--ink-soft); }
+.dc-prompts { margin: 0 0 0.8rem; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.6; color: var(--ink-soft); }
+
+.dc-link-btn {
+  background: none; border: 0; padding: 0.4rem 0; font: inherit; font-size: 0.9rem; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.dc-link-btn.on-desk { color: var(--desk-ink); }
+
+.dc-jar .dc-jar-row { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr) auto; gap: 0.8rem; align-items: center; padding: 0.7rem 0; font-family: var(--type); }
+.dc-jar .n { font-size: 0.8rem; color: var(--ink-soft); }
+.dc-jar .t { font-size: 0.98rem; line-height: 1.45; }
+.dc-jar-actions { display: flex; gap: 0.6rem; align-items: center; }
+@media (max-width: 560px) {
+  .dc-jar .dc-jar-row { grid-template-columns: minmax(0, 1fr); gap: 0.4rem; }
+}
+
+.dc-shapes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.8rem; }
+@media (max-width: 720px) { .dc-shapes { grid-template-columns: minmax(0, 1fr); } }
+.dc-shape {
+  display: flex; flex-direction: column; gap: 0.4rem; text-align: left; cursor: pointer;
+  background: var(--card); color: var(--ink); border: 2px solid transparent; padding: 1rem 1.1rem;
+  box-shadow: var(--shadow-sheet); font-family: var(--type);
+}
+.dc-shape.on { border-color: var(--pen); }
+.dc-shape .size { color: var(--pen); }
+.dc-shape .ex { color: var(--ink-soft); font-size: 0.8rem; }
+
+.dc-sentences { display: flex; flex-direction: column; gap: 0.3rem; }
+.dc-sentence {
+  text-align: left; background: transparent; border: 1px dashed rgba(27, 25, 21, .25); padding: 0.45rem 0.6rem;
+  font-family: var(--type); font-size: 0.9rem; line-height: 1.45; color: var(--ink); cursor: pointer;
+}
+.dc-sentence:hover { border-color: var(--ink); }
+.dc-sentence.on { background: #f6e94a; border-style: solid; border-color: #c9b92a; }
+.dc-redo { margin-top: 1.2rem; }
+
+.dc-details > summary { cursor: pointer; color: var(--desk-faint); list-style: none; padding: 0.6rem 0; }
+.dc-details > summary::-webkit-details-marker { display: none; }
+.dc-details > summary::before { content: "+ "; }
+.dc-details[open] > summary::before { content: "– "; }
